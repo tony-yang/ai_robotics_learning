@@ -77,6 +77,17 @@ Z = myrobot.sense()
 print(Z)
 print(myrobot)
 
+
+def eval(r, p):
+    result = 0.0
+    for i in range(len(p)):
+        dx = (p[i].x - r.x + (world_size/2.0)) % world_size - (world_size/2.0)
+        dy = (p[i].y - r.y + (world_size/2.0)) % world_size - (world_size/2.0)
+        err = sqrt(dx * dx + dy * dy)
+        result += err
+    return result / float(len(p))
+
+
 N = 1000
 T = 10
 
@@ -85,6 +96,8 @@ for i in range(N):
     r = robot()
     r.set_noise(0.05, 0.05, 5.0)
     p.append(r)
+
+print(eval(myrobot, p))
 
 for t in range(T):
     p2 = []
@@ -95,8 +108,6 @@ for t in range(T):
     w = []
     for i in range(N):
         w.append(p[i].measurement_prob(Z))
-
-    print(len(p))
 
     p3 = []
     # Inefficient implementation
@@ -134,5 +145,7 @@ for t in range(T):
 
         p3.append(p[index])
     p = p3
+
+    print(eval(myrobot, p))
 
 print(p)
