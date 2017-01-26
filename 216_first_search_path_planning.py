@@ -17,11 +17,14 @@ delta = [[-1, 0], # up
 delta_name = ['^', '<', 'v', '>']
 cost = 1
 
+expand = [[-1 for column in range(len(grid[0]))] for row in range(len(grid))]
+expand_index = 0
+
 def valid_position(i, j):
     #print("i = ", i, " j =", j)
     if ((i >= 0 and i <= len(grid)-1) and
         (j >= 0 and j <= len(grid[0])-1) and
-        (grid[i][j] != 1)):
+        (grid[i][j] == 0)):
         return True
 
     return False
@@ -43,7 +46,7 @@ def determine_goal(state):
 
     return False
 
-def search(starting_position):
+def search(starting_position, expand_index=0):
     new_open_list = deque()
     visited_position = {}
 
@@ -60,6 +63,8 @@ def search(starting_position):
         current_state = visiting_state
         is_goal = determine_goal(current_state)
         visited_position["{},{}".format(current_state[1], current_state[2])] = 1
+        expand[current_state[1]][current_state[2]] = expand_index
+        expand_index = expand_index + 1
         if is_goal:
             print(visiting_state)
             print('###### Search successful')
@@ -72,4 +77,6 @@ def search(starting_position):
     print('fail')
     return ['fail']
 
-search(init)
+search(init, expand_index)
+for i in range(len(expand)):
+    print(expand[i])
