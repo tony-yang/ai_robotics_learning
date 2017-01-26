@@ -28,8 +28,8 @@ def valid_position(i, j):
 
 def expand_children(current_state, visited_position, new_open_list):
     for i in range(len(delta)):
-        new_position_i = current_state[1] - delta[i][0]
-        new_position_j = current_state[2] - delta[i][1]
+        new_position_i = current_state[1] + delta[i][0]
+        new_position_j = current_state[2] + delta[i][1]
         if valid_position(new_position_i, new_position_j):
             child_state_cost = current_state[0] + 1
             child_state = [child_state_cost, new_position_i, new_position_j]
