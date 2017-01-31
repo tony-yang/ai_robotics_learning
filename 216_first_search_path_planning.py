@@ -1,10 +1,10 @@
 from collections import deque
 
 grid = [[0, 0, 1, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0],
         [0, 0, 1, 0, 1, 0],
         [0, 0, 1, 0, 1, 0],
-        [0, 0, 1, 0, 1, 0]]
+        [0, 0, 0, 0, 1, 0]]
 
 init = [0,0]
 goal = [len(grid)-1, len(grid[0])-1]
@@ -20,7 +20,7 @@ cost = 1
 expand = [[-1 for column in range(len(grid[0]))] for row in range(len(grid))]
 expand_index = 0
 
-goal_path_grid = [[' ' for column in range(len(grid[0]))] for row in range(len(grid))]
+goal_policy = [[' ' for column in range(len(grid[0]))] for row in range(len(grid))]
 
 def valid_position(i, j):
     #print("i = ", i, " j =", j)
@@ -42,6 +42,10 @@ def expand_children(current_state, visited_position, new_open_list, viable_pathe
             if (child_position not in visited_position and
                 child_state not in new_open_list):
                 new_open_list.append(child_state)
+                # The class solution stored the action took to reach this child
+                # I stored the parent position, and calculated the action based on the
+                # parent position and child position difference. I guess storing directly
+                # the action took is more convenient!
                 viable_pathes[child_position] = [current_state[1], current_state[2]]
 
 def determine_goal(state):
@@ -61,9 +65,9 @@ def determine_goal_path(goal_state, viable_pathes):
     for i in range(1, len(goal_path)):
         motion = [goal_path[i-1][0] - goal_path[i][0], goal_path[i-1][1] - goal_path[i][1]]
         delta_index = delta.index(motion)
-        goal_path_grid[goal_path[i][0]][goal_path[i][1]] = delta_name[delta_index]
+        goal_policy[goal_path[i][0]][goal_path[i][1]] = delta_name[delta_index]
 
-    goal_path_grid[goal[0]][goal[1]] = '*'
+    goal_policy[goal[0]][goal[1]] = '*'
 
 def search(starting_position, expand_index=0):
     new_open_list = deque()
@@ -104,5 +108,5 @@ search(init, expand_index)
 for i in range(len(expand)):
     print(expand[i])
 
-for i in range(len(goal_path_grid)):
-    print(goal_path_grid[i])
+for i in range(len(goal_policy)):
+    print(goal_policy[i])
