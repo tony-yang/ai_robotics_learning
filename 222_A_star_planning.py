@@ -1,7 +1,5 @@
-from operator import itemgetter
-
-grid = [[0, 1, 0, 0, 0, 0],
-        [0, 1, 0, 0, 0, 0],
+grid = [[0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 1, 0],
         [0, 1, 0, 0, 0, 0],
         [0, 1, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0]]
@@ -85,13 +83,22 @@ def search(starting_position, expand_index=0):
     current_position_j = starting_position[1]
     current_state_cost = [0]
     total_cost_to_goal = [current_state_cost[0] + heuristic[current_position_i][current_position_j]]
+    # The class uses 5 item list for each state representation. I used 4. I store the original state
+    # cost and the final total cost to goal. The heusristic cost can always be calculated by
+    # total cost to goal - original state cost
     new_open_list.append(total_cost_to_goal + current_state_cost + starting_position)
     print('initial open list:')
     print('    {}'.format(new_open_list))
 
     while new_open_list:
         print('----')
-        new_open_list.sort(key=itemgetter(0), reverse=True)
+        # Previously I used operator itemgetter to sort by only the first element of each state
+        # It seems that is less deterministic and is up to the behavior how the sort orders
+        # subsequent elements in the list. The pure list sort will compare each elements in orders
+        # So just use list.sort should do, although it might be less efficient
+        new_open_list.sort(reverse=True)
+        print('### After sort')
+        print('\t\t', new_open_list)
         visiting_state = new_open_list.pop()
         print('take list item')
         print(visiting_state)
