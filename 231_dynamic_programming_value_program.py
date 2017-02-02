@@ -18,17 +18,9 @@ delta = [[-1, 0], # up
 
 delta_name = ['^', '<', 'v', '>']
 cost_step = 1
-goal_state_cost = 0
 
 value = [[99 for item in row] for row in grid]
 policy = [[' ' for item in row] for row in grid]
-
-grid_position_i = goal[0]
-grid_position_j = goal[1]
-value[grid_position_i][grid_position_j] = goal_state_cost
-new_open_list = deque()
-new_open_list.append([grid_position_i, grid_position_j])
-visited_position = {}
 
 def valid_position(i, j):
     if (i >= 0 and i < len(grid) and j >= 0 and j < len(grid[0]) and
@@ -47,6 +39,14 @@ def expand_children(state, current_state_cost, visited_position, new_open_list):
             new_open_list.append([new_position_i, new_position_j])
 
 def update_value():
+    goal_state_cost = 0
+    grid_position_i = goal[0]
+    grid_position_j = goal[1]
+    value[grid_position_i][grid_position_j] = goal_state_cost
+    new_open_list = deque()
+    new_open_list.append([grid_position_i, grid_position_j])
+    visited_position = {}
+
     while new_open_list:
         explore_state = new_open_list.popleft()
     #    print('----- explore state')
@@ -60,6 +60,7 @@ def update_value():
     #    print('    ', visited_position)
 
 def update_policy():
+    policy[goal[0]][goal[1]] = '*'
     for i in range(len(value)):
         for j in range(len(value[0])):
             if value[i][j] != 99:
