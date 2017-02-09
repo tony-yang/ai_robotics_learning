@@ -91,7 +91,7 @@ class robot:
         return '[x={:.5f} y={:.5f} orient={:.5f}]'.format(self.x, self.y, self.orientation)
 
 
-def run(paramP, paramD):
+def run(paramP, paramD, paramI):
     myrobot = robot()
     myrobot.set(0.0, 1.0, 0.0)
     speed = 1.0 # motion distance is equal to speed (we assume time = 1)
@@ -100,11 +100,16 @@ def run(paramP, paramD):
 
     crosstrack_error = myrobot.y
     previous_crosstrack_error = myrobot.y
+    crosstrack_error_sum = 0.0
     for i in range(N):
         crosstrack_error = myrobot.y
-        new_steering_angle = -paramP * crosstrack_error - paramD * (crosstrack_error - previous_crosstrack_error)
+        crosstrack_error_sum += crosstrack_error
+        new_steering_angle = (-paramP * crosstrack_error
+            - paramD * (crosstrack_error - previous_crosstrack_error)
+            - paramI * crosstrack_error_sum)
+
         myrobot = myrobot.move(new_steering_angle, speed)
         previous_crosstrack_error = crosstrack_error
         print(myrobot, new_steering_angle)
 
-run(0.2, 3.0)
+run(0.2, 3.0, 0.004)
