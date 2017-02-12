@@ -121,8 +121,11 @@ def run(params, printflag = False):
     return err / float(N)
 
 def twiddle(tolerance = 0.001):
-    params = [0.0, 0.0, 0.0]
+    n_params = 3
+    params = [0.0 for i in range(n_params)]
     params_difference = [1.0 for i in params]
+    #params_difference[2] = 0.0
+    #params_difference[1] = 0.0
     best_error = run(params)
     iteration = 1
     while sum(params_difference) > tolerance:
