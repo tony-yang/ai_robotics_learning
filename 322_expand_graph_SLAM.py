@@ -147,7 +147,7 @@ class matrix:
         return repr(self.value)
 
 
-def doit(init, move1, move2):
+def doit(init, move1, move2, Z0, Z1, Z2):
     Omega = matrix([
         [1., 0., 0.],
         [0., 0., 0.],
@@ -182,7 +182,7 @@ def doit(init, move1, move2):
         [0., 0., 0., 0],
         [-1., 0., 0., 1.],
     ])
-    Xi += matrix([[-10], [0.], [0.], [10]])
+    Xi += matrix([[-Z0], [0.], [0.], [Z0]])
 
     Omega += matrix([
         [0., 0., 0., 0.],
@@ -190,17 +190,17 @@ def doit(init, move1, move2):
         [0., 0., 0., 0],
         [0., -1., 0., 1.],
     ])
-    Xi += matrix([[0.], [-5.], [0.], [5]])
+    Xi += matrix([[0.], [-Z1], [0.], [Z1]])
 
     Omega += matrix([
         [0., 0., 0., 0],
         [0., 0., 0., 0],
-        [0., 0., 1., -1.],
-        [0., 0., -1., 1.],
+        [0., 0., 5., -5.],
+        [0., 0., -5., 5.],
     ])
-    Xi += matrix([[0.], [0.], [-2.], [2]])
+    Xi += matrix([[0.], [0.], [-Z2 * 5], [Z2 * 5]])
 
     res = Omega.inverse() * Xi
     res.show()
 
-doit(-3, 5, 3)
+doit(-3, 5, 3, 10, 5, 1)
